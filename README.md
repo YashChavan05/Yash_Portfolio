@@ -2,7 +2,7 @@
 
 Welcome to my personal portfolio website — a fully responsive, sleek, and professional showcase of my work, skills, and experience. Designed to impress recruiters, collaborators, and clients from leading tech companies.
 
-> 🚀 Live Preview: [Visit Portfolio](https://your-portfolio-url.com)
+> 🚀 Live Preview: [Visit Portfolio](https://yashchavan.vercel.app)
 
 ---
 
