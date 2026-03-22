@@ -79,7 +79,7 @@ export function CertificationsSection() {
               <Card
                 key={cert.name + cert.provider}
                 className="group luxury-card bg-gradient-luxury/80 border-2 border-accent/30 shadow-xl transition-all duration-500 rounded-2xl animate-fade-in h-full min-h-[180px] flex flex-col justify-center hover:shadow-glow hover:-translate-y-2 hover:scale-105"
-                style={{ animationDelay: `${index * 0.08}s`, minWidth: '220px', maxWidth: '100%' }}
+                style={{ animationDelay: `${index * 0.08}s`, maxWidth: '100%' }}
               >
                 <CardContent className="p-4 flex flex-col items-center justify-center h-full min-h-[140px]">
                   <div className="flex items-center justify-center mb-4" style={{height: '5rem'}}>

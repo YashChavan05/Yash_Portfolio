@@ -106,7 +106,7 @@ export function HeroSection() {
             backgroundImage: `linear-gradient(135deg, rgba(245, 245, 244, 0.92), rgba(229, 231, 235, 0.85)), url(${heroBackground})`,
             backgroundSize: "cover",
             backgroundPosition: "center",
-            backgroundAttachment: "fixed"
+            backgroundAttachment: "scroll"
           }}
         />
         <div className="absolute inset-0 bg-gradient-hero opacity-60"></div>
@@ -120,13 +120,13 @@ export function HeroSection() {
       
       <div className="relative z-10 text-center max-w-4xl mx-auto px-6">
         <div className="animate-fade-in">
-          <h1 className="font-playfair text-luxury-lg md:text-luxury-xl lg:text-9xl font-bold mb-8 leading-tight tracking-tight text-black dark:text-white dark:drop-shadow-dark-glow">
+          <h1 className="font-playfair text-5xl sm:text-6xl md:text-8xl lg:text-9xl font-bold mb-8 leading-tight tracking-tight text-black dark:text-white dark:drop-shadow-dark-glow">
             Yash Chavan
           </h1>
-          <h2 className="font-inter text-2xl md:text-3xl lg:text-4xl mb-6 font-medium text-slate-700 dark:text-white/90">
+          <h2 className="font-inter text-xl sm:text-2xl md:text-3xl lg:text-4xl mb-6 font-medium text-slate-700 dark:text-white/90">
             Computer Engineering Student
           </h2>
-          <p className="font-inter text-xl md:text-2xl mb-16 max-w-3xl mx-auto leading-relaxed text-slate-700 dark:text-white/80">
+          <p className="font-inter text-lg sm:text-xl md:text-2xl mb-16 max-w-3xl mx-auto leading-relaxed text-slate-700 dark:text-white/80">
           Code. Create. Dominate.
           </p>
         </div>

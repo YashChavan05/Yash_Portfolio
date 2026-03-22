@@ -185,7 +185,7 @@ export function ContactSection() {
                          name="name"
                          placeholder="Your full name"
                          required
-                         className="border-border/50 focus:border-accent focus:ring-accent/20 transition-colors duration-300 text-sm py-2"
+                         className="border-border/50 focus:border-accent focus:ring-accent/20 transition-colors duration-300 text-base py-3"
                        />
                      </div>
                      <div className="space-y-1">
@@ -198,7 +198,7 @@ export function ContactSection() {
                          type="email"
                          placeholder="your.email@example.com"
                          required
-                         className="border-border/50 focus:border-accent focus:ring-accent/20 transition-colors duration-300 text-sm py-2"
+                         className="border-border/50 focus:border-accent focus:ring-accent/20 transition-colors duration-300 text-base py-3"
                        />
                      </div>
                    </div>
@@ -212,7 +212,7 @@ export function ContactSection() {
                        name="subject"
                        placeholder="What's this about?"
                        required
-                       className="border-border/50 focus:border-accent focus:ring-accent/20 transition-colors duration-300 text-sm py-2"
+                       className="border-border/50 focus:border-accent focus:ring-accent/20 transition-colors duration-300 text-base py-3"
                      />
                    </div>
 
@@ -225,8 +225,8 @@ export function ContactSection() {
                        name="message"
                        placeholder="Tell me about your project or how I can help you..."
                        required
-                       rows={4}
-                       className="border-border/50 focus:border-accent focus:ring-accent/20 transition-colors duration-300 resize-none text-sm py-2"
+                       rows={6}
+                       className="border-border/50 focus:border-accent focus:ring-accent/20 transition-colors duration-300 resize-none text-base py-3"
                      />
                    </div>
 

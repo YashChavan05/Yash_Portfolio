@@ -58,24 +58,27 @@ export function Header() {
           </a>
 
           {/* Navigation Tabs or Hamburger Menu */}
-          <div className="relative flex-1 flex justify-end">
+          <div className="flex items-center space-x-4">
+            {/* Desktop Navigation */}
             <div
-              className={`hidden md:flex items-center space-x-8 absolute right-0 top-0 transition-all duration-500 ease-in-out ${showExpanded ? 'opacity-100 translate-x-0 pointer-events-auto' : 'opacity-0 translate-x-12 pointer-events-none'}`}
+              className={`hidden md:flex items-center space-x-8 transition-all duration-500 ease-in-out ${showExpanded ? 'opacity-100 translate-x-0 pointer-events-auto' : 'opacity-0 translate-x-12 pointer-events-none absolute right-0'}`}
               style={{ minHeight: '48px' }}
             >
               {navigation.map((item) => (
                 <button
                   key={item.name}
                   onClick={() => scrollToSection(item.href)}
-                  className="font-inter font-medium transition-colors duration-300 text-black dark:text-white hover:text-accent dark:hover:text-accent"
+                  className="font-inter font-medium transition-colors duration-300 text-black dark:text-white hover:text-accent dark:hover:text-accent whitespace-nowrap"
                 >
                   {item.name}
                 </button>
               ))}
               <ThemeToggle />
             </div>
+
+            {/* Mobile Navigation Toggle & Theme Toggle for Scrolled/Mobile State */}
             <div
-              className={`flex items-center space-x-2 transition-all duration-500 ease-in-out ${showExpanded ? 'opacity-0 -translate-x-12 pointer-events-none' : 'opacity-100 translate-x-0 pointer-events-auto'}`}
+              className={`flex items-center space-x-2 transition-all duration-500 ease-in-out ${showExpanded ? 'md:opacity-0 md:-translate-x-12 md:pointer-events-none' : 'opacity-100 translate-x-0 pointer-events-auto'}`}
               style={{ minHeight: '48px' }}
             >
               <ThemeToggle />
@@ -84,6 +87,7 @@ export function Header() {
                 size="icon"
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
                 aria-label="Open menu"
+                className="md:hidden"
               >
                 {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
               </Button>

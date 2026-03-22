@@ -130,8 +130,8 @@ export function ExperienceSection() {
 
         {/* Timeline */}
         <div className="w-full flex flex-col items-center">
-          {/* Timeline Line with Dots */}
-          <div className="relative flex items-center justify-between mb-10 w-full max-w-5xl mx-auto" style={{minHeight: '32px'}}>
+          {/* Timeline Line with Dots - Hidden on mobile */}
+          <div className="relative hidden md:flex items-center justify-between mb-10 w-full max-w-5xl mx-auto" style={{minHeight: '32px'}}>
             {/* Timeline Progress Bar */}
             <div className="absolute top-1/2 left-0 right-0 h-0.5 bg-black/20 dark:bg-white/20 opacity-60 z-0" style={{transform: 'translateY(-50%)'}}></div>
             <div
@@ -162,13 +162,13 @@ export function ExperienceSection() {
               })}
             </div>
           </div>
-          {/* Timeline Cards */}
-          <div className="flex flex-row justify-between items-start w-full max-w-5xl mx-auto gap-4">
+          {/* Timeline Cards - Vertical on mobile, Horizontal on desktop */}
+          <div className="flex flex-col md:flex-row justify-center items-stretch w-full max-w-5xl mx-auto gap-8">
             {experiences.map((exp, index) => {
               const Icon = getIcon(exp.type)
               return (
-                <div key={`${exp.company}-${exp.period}`} className="flex flex-col items-center flex-1 min-w-[220px] max-w-xs">
-                  <Card className="group border-border/50 bg-gradient-card hover:shadow-elegant transition-all duration-300 hover:-translate-y-1">
+                <div key={`${exp.company}-${exp.period}`} className="flex flex-col items-center flex-1 w-full max-w-md mx-auto">
+                  <Card className="h-full group border-border/50 bg-gradient-card hover:shadow-elegant transition-all duration-300 hover:-translate-y-1 w-full">
                     <CardHeader className="pb-4">
                       <div className="flex items-start justify-between mb-2">
                         <div className={`w-12 h-12 bg-accent/10 rounded-lg flex items-center justify-center group-hover:bg-accent/20 transition-colors duration-300 ${exp.type === 'education' ? 'bg-primary/10 group-hover:bg-primary/20' : ''}`}>

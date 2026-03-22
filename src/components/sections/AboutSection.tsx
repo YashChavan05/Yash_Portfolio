@@ -60,12 +60,12 @@ export function AboutSection() {
             </div>
           </div>
           {/* Image on the right */}
-          <div className="space-y-8 scroll-reveal order-1 lg:order-2 flex items-center justify-center h-full">
-            <div className="relative">
+          <div className="space-y-8 scroll-reveal order-1 lg:order-2 flex items-center justify-center">
+            <div className="relative w-full max-w-sm">
               <img
                 src={profileImage}
                 alt="Yash Kiran Chavan"
-                className="w-80 h-80 lg:w-96 lg:h-96 rounded-3xl object-cover shadow-luxury"
+                className="w-full aspect-square rounded-3xl object-cover shadow-luxury mx-auto"
               />
             </div>
           </div>
