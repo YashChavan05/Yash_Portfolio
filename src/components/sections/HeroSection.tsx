@@ -1,223 +1,144 @@
-import { ArrowRight, Download, Github, Linkedin, Mail, Instagram } from "lucide-react"
+import { Download, Github, Linkedin, Mail, Instagram, ChevronDown } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import heroBackground from "@/assets/hero-bg.jpg"
-import { useEffect, useRef } from "react"
-
-// Particle background component
-function ParticlesBackground() {
-  const canvasRef = useRef<HTMLCanvasElement>(null)
-
-  useEffect(() => {
-    const canvas = canvasRef.current
-    if (!canvas) return
-    const ctx = canvas.getContext('2d')
-    if (!ctx) return
-    let animationId: number
-    const isDark = document.documentElement.classList.contains('dark')
-    const colors = isDark
-      ? [
-          'rgba(243,244,246,0.10)', // Platinum White
-          'rgba(156,163,175,0.10)', // Cool Gray
-          'rgba(55,65,81,0.10)'     // Dark Gray
-        ]
-      : [
-          'rgba(107,114,128,0.10)', // Slate Gray
-          'rgba(229,231,235,0.10)', // Soft Gray
-          'rgba(35,35,35,0.10)'     // Charcoal Black
-        ]
-    const particles: {x: number, y: number, r: number, dx: number, dy: number, o: number}[] = []
-    const resize = () => {
-      canvas.width = window.innerWidth
-      canvas.height = window.innerHeight
-    }
-    resize()
-    window.addEventListener('resize', resize)
-    for (let i = 0; i < 32; i++) {
-      particles.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        r: 16 + Math.random() * 24,
-        dx: (Math.random() - 0.5) * 0.3,
-        dy: (Math.random() - 0.5) * 0.3,
-        o: Math.random() * 0.5 + 0.2
-      })
-    }
-    const draw = () => {
-      ctx.clearRect(0, 0, canvas.width, canvas.height)
-      for (const p of particles) {
-        ctx.beginPath()
-        ctx.arc(p.x, p.y, p.r, 0, 2 * Math.PI)
-        ctx.fillStyle = colors[Math.floor(Math.random() * colors.length)]
-        ctx.globalAlpha = p.o
-        ctx.fill()
-        ctx.globalAlpha = 1
-        p.x += p.dx
-        p.y += p.dy
-        if (p.x < -p.r) p.x = canvas.width + p.r
-        if (p.x > canvas.width + p.r) p.x = -p.r
-        if (p.y < -p.r) p.y = canvas.height + p.r
-        if (p.y > canvas.height + p.r) p.y = -p.r
-      }
-      animationId = requestAnimationFrame(draw)
-    }
-    draw()
-    return () => {
-      window.removeEventListener('resize', resize)
-      cancelAnimationFrame(animationId)
-    }
-  }, [])
-  return <canvas ref={canvasRef} className="absolute inset-0 w-full h-full pointer-events-none z-0" />
-}
+import { useEffect, useRef, useState } from "react"
+import { motion, useScroll, useTransform } from "framer-motion"
 
 export function HeroSection() {
-  const bgRef = useRef<HTMLDivElement>(null)
-  useEffect(() => {
-    const handleScroll = () => {
-      if (bgRef.current) {
-        const y = window.scrollY
-        bgRef.current.style.transform = `translateY(${y * 0.2}px)`
-      }
-    }
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 })
+  const { scrollY } = useScroll()
+  const y1 = useTransform(scrollY, [0, 500], [0, 200])
+  const opacity = useTransform(scrollY, [0, 300], [1, 0])
 
-  const scrollToContact = () => {
-    const element = document.querySelector("#contact")
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" })
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePosition({
+        x: (e.clientX / window.innerWidth - 0.5) * 20,
+        y: (e.clientY / window.innerHeight - 0.5) * 20
+      })
+    }
+    window.addEventListener("mousemove", handleMouseMove)
+    return () => window.removeEventListener("mousemove", handleMouseMove)
+  }, [])
+  
+  const scrollToProjects = () => {
+    document.querySelector("#projects")?.scrollIntoView({ behavior: "smooth" })
+  }
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.15,
+        delayChildren: 0.5,
+      }
     }
   }
 
-  const scrollToProjects = () => {
-    const element = document.querySelector("#projects")
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" })
+  const itemVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: { 
+      opacity: 1, 
+      y: 0,
+      transition: { duration: 1.2, ease: [0.22, 1, 0.36, 1] as any }
     }
   }
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Parallax Background */}
-      <div ref={bgRef} className="absolute inset-0 will-change-transform z-0">
-        <div 
-          className="absolute inset-0 parallax-bg"
-          style={{
-            backgroundImage: `linear-gradient(135deg, rgba(245, 245, 244, 0.92), rgba(229, 231, 235, 0.85)), url(${heroBackground})`,
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            backgroundAttachment: "scroll"
-          }}
-        />
-        <div className="absolute inset-0 bg-gradient-hero opacity-60"></div>
-        {/* Dark mode animated gradient overlay & vignette */}
-        <div className="hidden dark:block absolute inset-0 z-10 pointer-events-none">
-          <div className="absolute inset-0 animate-dark-gradient bg-gradient-to-br from-[#0f2027]/80 via-[#2c5364]/60 to-[#232526]/90 opacity-80" />
-          <div className="absolute inset-0 bg-black/60" style={{maskImage: 'radial-gradient(ellipse at center, rgba(0,0,0,0) 60%, black 100%)'}} />
-        </div>
+    <section className="relative h-screen flex items-center justify-center overflow-hidden">
+      {/* Background - Soft Ambient Glows */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/5 rounded-full blur-[120px] animate-pulse" />
+        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-accent/5 rounded-full blur-[120px] animate-pulse" />
       </div>
-      {/* Animated Particles */}
       
-      <div className="relative z-10 text-center max-w-4xl mx-auto px-6">
-        <div className="animate-fade-in">
-          <h1 className="font-playfair text-5xl sm:text-6xl md:text-8xl lg:text-9xl font-bold mb-8 leading-tight tracking-tight text-black dark:text-white dark:drop-shadow-dark-glow">
-            Yash Chavan
+      <motion.div 
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+        style={{ 
+          opacity,
+          rotateX: mousePosition.y * -0.05,
+          rotateY: mousePosition.x * 0.05,
+          x: mousePosition.x * 0.2,
+          y: y1
+        }}
+        className="relative z-10 text-center max-w-4xl mx-auto px-6"
+      >
+        <motion.div variants={itemVariants}>
+          <motion.span 
+            className="inline-block py-1 pr-3 rounded-full text-primary/80 text-[10px] uppercase font-bold mb-6 tracking-[0.4em]"
+          >
+            // Available for new opportunities
+          </motion.span>
+          <h1 className="font-playfair text-6xl md:text-8xl font-black mb-6 leading-[1.1] tracking-tight text-white drop-shadow-2xl">
+            Yash <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary via-white to-accent">Chavan</span>
           </h1>
-          <h2 className="font-inter text-xl sm:text-2xl md:text-3xl lg:text-4xl mb-6 font-medium text-slate-700 dark:text-white/90">
-            Computer Engineering Student
+          <h2 className="font-outfit text-xl md:text-2xl mb-8 font-light text-white/70 tracking-widest uppercase">
+            Computer Engineering <span className="text-primary/60">&</span> Full-Stack Exploration
           </h2>
-          <p className="font-inter text-lg sm:text-xl md:text-2xl mb-16 max-w-3xl mx-auto leading-relaxed text-slate-700 dark:text-white/80">
-          Code. Create. Dominate.
+          <p className="font-outfit text-base md:text-lg max-w-xl mx-auto mb-12 leading-relaxed text-white/30">
+            Designing digital horizons with <span className="text-white/60 font-medium">precision engineering</span> and <span className="text-white/60 font-medium tracking-wide">user-centric intentionality.</span>
           </p>
-        </div>
+        </motion.div>
 
-        <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16 animate-slide-up">
-          <a href="/Yash_Resume.pdf" download className="inline-block">
-            <Button 
-              size="lg"
-              className="bg-accent text-white font-inter font-bold px-10 py-4 text-lg rounded-full transition-all duration-300 shadow-lg hover:bg-accent/90 hover:shadow-xl group dark:border-2 dark:border-emerald/60 dark:hover:shadow-glow-dark dark:hover:border-emerald"
-            >
-              <Download className="mr-3 h-6 w-6 group-hover:translate-y-1 transition-transform" />
-              Download CV
-            </Button>
-          </a>
+        <motion.div 
+          variants={itemVariants}
+          className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16"
+        >
+          <Button 
+            size="lg"
+            className="bg-white text-black hover:bg-white/90 px-10 py-7 text-xs font-black rounded-full transition-all duration-500 shadow-2xl hover:scale-105 active:scale-95"
+            asChild
+          >
+            <a href="/Yash_Resume.pdf" download>
+              <Download className="mr-2 h-4 w-4" />
+              Download Resume
+            </a>
+          </Button>
           <Button 
             onClick={scrollToProjects}
+            variant="outline"
             size="lg"
-            className="bg-accent text-white font-inter font-bold px-10 py-4 text-lg rounded-full transition-all duration-300 shadow-lg hover:bg-accent/90 hover:shadow-xl group dark:border-2 dark:border-emerald/60 dark:hover:shadow-glow-dark dark:hover:border-emerald"
+            className="bg-transparent border-white/10 hover:border-white/40 text-white/60 hover:text-white px-10 py-7 text-xs font-bold rounded-full transition-all duration-500 backdrop-blur-md hover:scale-105 active:scale-95"
           >
-            Explore My Work
-            <div className="ml-3 w-2 h-2 bg-white rounded-full group-hover:animate-pulse"></div>
+            Explore Work
+            <ChevronDown className="ml-2 h-4 w-4" />
           </Button>
-        </div>
+        </motion.div>
 
-        <div className="flex justify-center space-x-6 animate-slide-in-right">
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-12 w-12 rounded-full bg-white/10 hover:bg-white/20 transition-all duration-300 hover:scale-110"
-            asChild
-          >
-            <a href="https://github.com/YashChavan05" target="_blank" rel="noopener noreferrer">
-              <Github className="h-6 w-6 text-black dark:text-white" />
+        <motion.div 
+          variants={itemVariants}
+          className="flex justify-center space-x-6"
+        >
+          {[
+            { icon: Github, href: "https://github.com/YashChavan05" },
+            { icon: Linkedin, href: "https://linkedin.com/in/yash-chavan-78b009233" },
+            { icon: Instagram, href: "https://instagram.com/the_yashchavan" },
+            { icon: Mail, href: "mailto:yashkiranchavan05@gmail.com" }
+          ].map((item, i) => (
+            <a 
+              key={i} 
+              href={item.href} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-white/20 hover:text-primary transition-all duration-300 transform hover:scale-110"
+            >
+              <item.icon className="h-5 w-5" />
             </a>
-          </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-12 w-12 rounded-full bg-white/10 hover:bg-white/20 transition-all duration-300 hover:scale-110"
-            asChild
-          >
-            <a href="https://linkedin.com/in/yash-chavan-78b009233" target="_blank" rel="noopener noreferrer">
-              <Linkedin className="h-6 w-6 text-black dark:text-white" />
-            </a>
-          </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-12 w-12 rounded-full bg-white/10 hover:bg-white/20 transition-all duration-300 hover:scale-110"
-            asChild
-          >
-            <a href="https://instagram.com/the_yashchavan" target="_blank" rel="noopener noreferrer">
-              <Instagram className="h-6 w-6 text-black dark:text-white" />
-            </a>
-          </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-12 w-12 rounded-full bg-white/10 hover:bg-white/20 transition-all duration-300 hover:scale-110"
-            asChild
-          >
-            <a href="mailto:yashkiranchavan05@gmail.com">
-              <Mail className="h-6 w-6 text-black dark:text-white" />
-            </a>
-          </Button>
-        </div>
-      </div>
+          ))}
+        </motion.div>
+      </motion.div>
 
-      {/* Scroll Indicator */}
-      <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-        <div className="w-6 h-10 border-2 border-white/50 rounded-full flex justify-center">
-          <div className="w-1 h-3 bg-white/70 rounded-full mt-2 animate-pulse"></div>
-        </div>
-      </div>
-      <style>{`
-        @keyframes dark-gradient {
-          0% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-          100% { background-position: 0% 50%; }
-        }
-        .animate-dark-gradient {
-          background-size: 200% 200%;
-          animation: dark-gradient 8s ease-in-out infinite;
-        }
-        .dark .drop-shadow-dark-glow {
-          filter: drop-shadow(0 0 32px #00ffd0cc) drop-shadow(0 2px 8px #00ffd044);
-        }
-        .dark .shadow-glow-dark {
-          box-shadow: 0 0 32px 8px #00ffd088, 0 2px 8px 0 #00ffd044;
-        }
-      `}</style>
+      {/* Subtle Scroll Indicator */}
+      <motion.div 
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.5, duration: 1 }}
+        className="absolute bottom-10 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+      >
+        <div className="w-[1px] h-10 bg-gradient-to-b from-primary/30 to-transparent" />
+      </motion.div>
     </section>
   )
 }
