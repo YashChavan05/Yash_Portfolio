@@ -28,10 +28,3 @@ Welcome to my personal portfolio website — a fully responsive, sleek, and prof
 
 ---
 
-## 📸 Screenshots
-
-| Light Mode | Dark Mode |
-|------------|-----------|
-| ![light](screenshots/light.png) | ![dark](screenshots/dark.png) |
-
----
