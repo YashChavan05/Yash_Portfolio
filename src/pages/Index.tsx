@@ -11,24 +11,37 @@ import { Footer } from "@/components/Footer"
 import { useIntersectionObserver } from "@/hooks/useScrollAnimations"
 
 const Index = () => {
+  useIntersectionObserver()
+
   useEffect(() => {
     // Add smooth scrolling behavior
     document.documentElement.style.scrollBehavior = "smooth"
-    
-    // Core Layout Classes for Sections
-    const sections = document.querySelectorAll("section")
-    sections.forEach((el) => {
-      el.classList.add("section-scene")
-      el.classList.add("snap-start")
-    })
+
+    // Intersection Observer for animations
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: "0px 0px -50px 0px"
+    }
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("animate-fade-in")
+        }
+      })
+    }, observerOptions)
+
+    const animateElements = document.querySelectorAll(".animate-on-scroll")
+    animateElements.forEach((el) => observer.observe(el))
 
     return () => {
+      observer.disconnect()
       document.documentElement.style.scrollBehavior = "auto"
     }
   }, [])
 
   return (
-    <div className="h-screen !bg-transparent text-white overflow-x-hidden overflow-y-scroll snap-y snap-mandatory scroll-smooth">
+    <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
       <Header />
       <main>
         <HeroSection />

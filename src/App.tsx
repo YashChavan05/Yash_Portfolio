@@ -18,31 +18,48 @@ function CustomCursor() {
     const style = cursor.style
     style.position = 'fixed'
     style.zIndex = '9999'
-    style.width = '10px'
-    style.height = '10px'
+    style.width = '12px'
+    style.height = '12px'
     style.borderRadius = '50%'
     style.pointerEvents = 'none'
-    style.transition = 'transform 0.15s ease-out, opacity 0.15s ease-out, background 0.15s ease-out'
+    style.transition = 'transform 0.18s cubic-bezier(0.4,0,0.2,1), box-shadow 0.18s, background 0.18s'
     style.transform = 'translate(-50%, -50%) scale(1)'
-    style.mixBlendMode = 'difference'
-    style.background = 'white'
-    style.opacity = '0.5'
+    let mouseX = 0, mouseY = 0
+
+    // Theme-aware color
+    const setCursorColor = () => {
+      const isDark = document.documentElement.classList.contains('dark')
+      if (isDark) {
+        style.background = 'radial-gradient(circle, #fff 60%, #bbb 100%)'
+        style.boxShadow = '0 0 24px 6px #fff8, 0 0 0 2px #fff4 inset'
+      } else {
+        style.background = 'radial-gradient(circle, #111 60%, #444 100%)'
+        style.boxShadow = '0 0 24px 6px #1118, 0 0 0 2px #1114 inset'
+      }
+    }
+    setCursorColor()
+    const observer = new MutationObserver(setCursorColor)
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] })
 
     const move = (e: MouseEvent) => {
-      style.left = e.clientX + 'px'
-      style.top = e.clientY + 'px'
+      mouseX = e.clientX
+      mouseY = e.clientY
+      style.left = mouseX + 'px'
+      style.top = mouseY + 'px'
     }
     const grow = () => {
-      style.transform = 'translate(-50%, -50%) scale(2.5)'
-      style.opacity = '0.8'
+      style.transform = 'translate(-50%, -50%) scale(1.7)'
+      const isDark = document.documentElement.classList.contains('dark')
+      style.boxShadow = isDark
+        ? '0 0 48px 12px #fffA, 0 0 0 2px #fff4 inset'
+        : '0 0 48px 12px #111A, 0 0 0 2px #1114 inset'
     }
     const shrink = () => {
       style.transform = 'translate(-50%, -50%) scale(1)'
-      style.opacity = '0.5'
+      setCursorColor()
     }
     document.addEventListener('mousemove', move)
-    const targets = document.querySelectorAll('a, button, input, textarea, [role="button"], .cursor-pointer')
-    targets.forEach(el => {
+    document.querySelectorAll('a, button, input, textarea, [role="button"], .cursor-pointer').forEach(el => {
       el.addEventListener('mouseenter', grow)
       el.addEventListener('mouseleave', shrink)
     })
@@ -51,7 +68,8 @@ function CustomCursor() {
       document.body.style.cursor = ''
       document.removeEventListener('mousemove', move)
       cursor.remove()
-      targets.forEach(el => {
+      observer.disconnect()
+      document.querySelectorAll('a, button, input, textarea, [role="button"], .cursor-pointer').forEach(el => {
         el.removeEventListener('mouseenter', grow)
         el.removeEventListener('mouseleave', shrink)
       })
